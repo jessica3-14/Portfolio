@@ -1,0 +1,45 @@
+model=createpde();
+pderect([-1 1 -2 -1]);
+pderect([-1 1 -1 -.75]);
+pderect([-1 1 -.75 .75]);
+pderect([-1 1 .75 1]);
+pderect([-1 1 1 2]);
+****EXPORT MODEL HERE*****
+dl = decsg(gd,sf,ns);
+geometryFromEdges(model,dl);
+generateMesh(model,'Hmax',.1);
+pdemesh(model);
+specifyCoefficients(model,'m',0,'d',0,'c',1,'a',0,'f',0);
+pdegplot(model,'EdgeLabels','on','FaceLabels','on');
+applyBoundaryCondition(model,'dirichlet','Edge',7,'u',-1);
+applyBoundaryCondition(model,'dirichlet','Edge',8,'u',0);
+applyBoundaryCondition(model,'dirichlet','Edge',9,'u',1);
+applyBoundaryCondition(model,'dirichlet','Edge',10,'u',0);
+applyBoundaryCondition(model,'dirichlet','Edge',11,'u',-1);
+applyBoundaryCondition(model,'dirichlet','Edge',12,'u',-1);
+applyBoundaryCondition(model,'dirichlet','Edge',13,'u',0);
+applyBoundaryCondition(model,'dirichlet','Edge',14,'u',1);
+applyBoundaryCondition(model,'dirichlet','Edge',15,'u',0);
+applyBoundaryCondition(model,'dirichlet','Edge',16,'u',-1);
+results = solvepde(model);
+u = results.NodalSolution;
+pdeplot(model,'XYData',u);
+title('Numerical Solution');
+xlabel('x');
+ylabel('y');
+xq=-1:.02:1; 
+yq=2*xq;
+[X,Y]=meshgrid(xq,yq); 
+[gradx,grady] = evaluateGradient(results,X,Y);
+gradx = reshape(gradx,size(X));
+grady = reshape(grady,size(Y)); 
+quiver(X,Y,gradx,grady);
+for x=1:101
+	for y=1:101
+		fieldx(y,x)=xq(x)/100/((xq(x)^2+yq(y)^2)^1.5);
+		fieldy(y,x)=yq(y)/100/((xq(x)^2+yq(y)^2)^1.5);
+	end
+end
+quiver(X,Y,newx-gradx,newy-grady)
+
+
