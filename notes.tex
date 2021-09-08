@@ -1,0 +1,132 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}[subsection]
+\newenvironment{amatrix}[1]{%
+  \left(\begin{array}{@{}*{#1}{c}|c@{}}
+}{%
+  \end{array}\right)
+}
+
+\begin{document}
+\paragraph{Notes 8/31/2021}
+What is a linear system of equations anyways -
+an m X n system is a collection of m linear equations
+in n variables of the form 
+\[a_{11}x_1+a_{12}x_2...+a_{n1}x_n=b_1\]
+\[a_{12}x_1+a_{22}x_2...+a_{n2}x_n=b_2\]
+\[a_{1m}x_1+a_{m2}x_2...+a_{nm}x_n=b_n\]
+Xs are the variables, as are the coefficient matrix, coefficient matrix and the collection of b values determine the system
+\hfill \break
+First interesting case is the 2x2 matrix
+\[x_1+x_2=2\]
+\[x_1-x_2=2\]
+Each equation corresponds to a line in the x1/x2 plane,
+solution is a coordinate of their intersection: 
+can be zero, one, or infinitely many solutions
+\hfill \break
+In this case we have the point $(2,0)$ as the single solution
+\[x_1+x_2=2\]
+\[x_1+x_2=1\]
+Case of zero solutions - parallel and distinct b/c same slope and different x2 intercepts (inconsistent)
+\[x_1+x_2=2\]
+\[-x_1-x_2=-2\]
+Case of infinitely many solutions - same line
+
+\paragraph{Equivalent systems}
+Let $S$ = the set of all vectors $(x_1...x_n)$ in $\mathbb{R}^n$ such that the vector is a solution to the general linear system-
+it is a function of the linear system
+\hfill \break
+Cardinality can be 1 (ie unique solution),
+cardinality 0 (inconsistent or no solution),
+cardinality infinite is infinitely many solutions
+\hfill \break
+Linear systems with same solution set are equivalent
+\hfill \break
+Select two distinct equations from the system - ways to preserve equivalence (elementary row operations):
+\hfill \break
+1. Change order of equations
+\hfill \break
+2. Multiply equation by a scalar
+\hfill \break
+3. Add equation to another equation (can combine with scalar multiplication) ****PROVE THIS AS AN EXERCISE****
+
+\paragraph{Square and triangular systems}
+System is strict triangular form iff the k-th equation, coefficient of first k-1 variables are 0,
+and coefficient of $x_k$ is nonzero,
+for all $k=1,...,n$
+\hfill \break
+Benefit of these systems is ability to backsubstitute to solve with ease
+\[\begin{bmatrix}
+    x_1 & 2x_2 & x_3 & 3\\
+    3x_1 & -1x_2 & -3x_3 & -1\\
+    2x_1 & 3x_2 & x_3 & 4
+\end{bmatrix}\]
+pivot variable is first nonzero entry
+\paragraph{9/2/21}
+Strict triangular form not always possible, because may not be square? \\
+\[\begin{amatrix}{5}
+    1&1&1&1&1&1\\
+    -1&-1&0&0&1&-1\\
+    -2&-2&0&0&3&1\\
+    0&0&1&1&3&-1\\
+    1&1&2&2&4&1
+\end{amatrix}\]
+row operations: $R-1+R_2 \rightarrow R_2, 2R_1+R_3\rightarrow R_3, -R_1+R_5 \rightarrow R_5$ \\
+step 2: $-2R_2+R_3\rightarrow R_3, -R_2 +R_4 \rightarrow R_4, -R_2+R_5 \rightarrow R_5$ \\
+step 3: $-R_3+R_4 \rightarrow R_4, -R_3 +R_5 \rightarrow R_5$ \\
+\[\begin{amatrix}{5}
+    1&1&1&1&1&1\\
+    0&0&1&1&2&0\\
+    0&0&0&0&1&3\\
+    0&0&0&0&0&-4\\
+    0&0&0&0&0&-3
+\end{amatrix}\]
+End result -- extremely inconsistent, if $b$ were changed so that bottom two rows end in zero the solution set $S$
+would be a 3-space in 5-space \\
+\[\begin{amatrix}{5}
+    1&1&1&1&1&1\\
+    0&0&1&1&2&0\\
+    0&0&0&0&1&3\\
+    0&0&0&0&0&0\\
+    0&0&0&0&0&0
+\end{amatrix}\]
+Goal is to describe the solution set,
+$x_1+x_2+x_3+x_4+x_5=1, x_3+x_4+2x_5=0, x_5=3$ \\
+S is is the set of vectors in $\mathbb{R}^5$ such that they solve the linear system \\
+We have pivots in the columns corresponding to $x_1,x_3,x_5$ and these should be used as they are lead variables.
+All other variables ($x_2,x_4$ in this case) are free variables. \\
+Rewrite to solve for lead variable in terms of free --
+$x_5=3, x_3+2x_5=-x_4, x_1+x_3+x_5=1-x_2-x_4$,
+this leaves us with a 3x3 strictly traingular system, any choice of $x_2$ and $x_4$
+uniquely determines a solution to the system. \\
+With backsolving we find that $x_1=-x_2+4, x_3=-x_4-6,x_5=3, x_2 and x_4 \in \mathbb{R}$\\
+\paragraph{Linear independence}
+There are no solutions $(\alpha, \beta)$ such that $\alpha \bar{x} + \beta \bar{y} = \bar{0}$ \\
+Equivalent to saying they're not scalar multiples of each other. \\
+All orthogonal vectors are linearly independent but not all linearly independent vectors are orthogonal 
+\paragraph{Row-echelon form}
+\begin{definition}
+    A matrix $A$ is in row-echelon form (REF) iff first nonzero entry in each row is 1, \\
+    if row k has a nonzero entry, number of leading zero entries in k+1 greater than number in row k, \\
+    All rows consisting entirely of zeros are below any row with a nonzero entry 
+\end{definition}
+RREF (reduced row-echelon form) is addition steps to zero out anything to the right of the pivots,
+automatically expressing lead variables in terms of free variables\\
+It is easiest to go bottom up and right to left when solving\\
+Columns with free variables do not have restriction on number of nonzero entries they can have\\
+For reduced form, additional condition to the definition is that the first nonzero entry in each row is the only nonzero entry in its column
+
+\paragraph{Homogeneous systems}
+An $m \times n$ linear system of the form $(A \mid \bar{0})$ ie. the second bit is the zero vector.\\
+An $m \times n$ homogeneous system has a nonzero solution if $n>m$\\
+A homogeneous system is always consistent since the zero vector is always in the solution set \\
+Let $U$ be the row-echelon form of the matrix $A$. \\
+The matrix $U$ has at most $m$ nonzero rows because it has $m$ rows,
+thus there are at most $m$ lead variable. \\
+If $n>m$, then there must be at least one free variable, hence it has infinitely many nonzero solutions\\
+
+
+
+\end{document}
